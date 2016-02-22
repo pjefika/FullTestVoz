@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/recursos/template/template.xhtml">
+
+	<ui:define name="tituloPagina">
+		 FullTest - Voz
+	</ui:define>
+	<ui:define name="tituloPrincipal">
+		<i class="fa fa-wrench"> </i> Inicio</ui:define>
+	<ui:define name="tituloSecundario"></ui:define>
+
+	<ui:define name="botoesAcao"></ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form>
+			<p:panel header="FullTest Voz">
+				<h:panelGrid columns="3">
+					<p:inputText id="instancia"
+						value="#{consultaCadastro.cliente.instancia}"
+						placeholder="Instância..." />
+					<p:message for="instancia" />
+					<p:commandButton action="#{consultaCadastro.consultar()}"
+						value="Consultar" update="@form, cadastro" />
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+
+		<h:form id="cadastro">
+			<p:panel header="Cadastro" style="margin-top: 15px">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="Tecnologia de Linha:" />
+					<p:outputLabel
+						value="#{consultaCadastro.cliente.linha.tipoCentral}" />
+				</p:panelGrid>
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>
