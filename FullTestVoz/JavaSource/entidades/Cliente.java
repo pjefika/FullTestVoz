@@ -1,11 +1,17 @@
 package entidades;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import bean.ossturbonet.oss.gvt.com.GetInfoOut;
 import bean.ossturbonet.oss.gvt.com.RadiusInfo;
 import entidades.linha.Linha;
+import entidades.linha.LinhaInterface;
 
 public class Cliente {
 	
+	@NotEmpty
+	@Length(min=10, max=12, message="Instância inválida!")
 	private String instancia;
 	
 	private String designador;

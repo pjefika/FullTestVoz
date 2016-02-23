@@ -13,13 +13,14 @@ import exception.ossturbonet.oss.gvt.com.DataNotFoundException;
 import exception.ossturbonet.oss.gvt.com.OSSTurbonetException;
 import model.CadastroServico;
 import model.ClienteServico;
+import model.FullTestVoz;
 import model.linha.LinhaServico;
+import model.linha.LinhaSipServico;
 import util.JSFUtil;
-
 
 @ManagedBean
 @ViewScoped
-public class ConsultaCadastro{
+public class ConsultaInstancia implements FullTestVoz{
 
 	private Cliente cliente;
 
@@ -29,25 +30,34 @@ public class ConsultaCadastro{
 
 	private ClienteServico servicoCliente;
 
-	public ConsultaCadastro(){
-		
+	public ConsultaInstancia(){
+
 		this.cliente = new Cliente();
 		this.servicoCadastro = new CadastroServico();
-		this.servicoLinha = new LinhaServico();
 		this.servicoCliente = new ClienteServico();
-	}
-	
-	
-	public void consultar(){
-		
-		this.consultaCadastro();
-		this.consultaLinha();
 		
 	}
-	
 
 
-	public void consultaCadastro(){
+	/**
+	 * Método acionado pelo Usuário na página inicial (index.xhtml);
+	 * @return 
+	 * 
+	 */
+	public Cliente consultar(){
+
+		this.consultarCadastro();
+		this.consultarLinha();
+		this.consultarServico();
+		
+		//this.diagnostico();
+		
+		return this.cliente;
+	}
+
+
+
+	public void consultarCadastro(){
 
 		try {		
 
@@ -63,18 +73,36 @@ public class ConsultaCadastro{
 			JSFUtil.addErrorMessage("Cadastro não encontrado!");
 		}	
 	}
-	
-	public void consultaLinha(){
+
+	public void consultarLinha(){
 
 		try {
 
 			GetSwitchInfoOut infoSwitch = this.servicoLinha.getInfoSwitch(this.cliente.getInstancia());
 			
-			this.cliente.getLinha().setTipoCentral((infoSwitch.getResultMessage()));
 
+			
 		} catch (RemoteException e) {
 			JSFUtil.addErrorMessage(e.getMessage());
 		}
+	}
+
+	public void diagnostico() {
+
+		try {
+			this.servicoLinha.executarDiagnostico(this.cliente.getInstancia(), this.cliente.getDesignador());
+		} catch (RemoteException e) {
+			JSFUtil.addErrorMessage(e.getMessage());
+		}
+
+	}
+
+	public void consultarServico(){
+
+		if(this.cliente.getLinha().toString().equals("IMS-SIP")){
+			this.servicoLinha = new LinhaSipServico();
+		}
+
 	}
 
 	public CadastroServico getServicoCadastro() {
@@ -114,6 +142,4 @@ public class ConsultaCadastro{
 	public void setServicoCliente(ClienteServico servicoCliente) {
 		this.servicoCliente = servicoCliente;
 	}
-
-
 }

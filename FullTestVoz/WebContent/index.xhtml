@@ -22,21 +22,40 @@
 			<p:panel header="FullTest Voz">
 				<h:panelGrid columns="3">
 					<p:inputText id="instancia"
-						value="#{consultaCadastro.cliente.instancia}"
+						value="#{consultaInstancia.cliente.instancia}"
 						placeholder="Instância..." />
+
+					<p:commandButton action="#{consultaInstancia.consultar()}"
+						value="Consultar" update="@form, cadastro">
+						<p:ajaxStatus onstart="PF('statusDialog').show()"
+							onsuccess="PF('statusDialog').hide()" />
+					</p:commandButton>
+
 					<p:message for="instancia" />
-					<p:commandButton action="#{consultaCadastro.consultar()}"
-						value="Consultar" update="@form, cadastro" />
+
+					<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+						closable="false" resizable="false" showHeader="false">
+						<h:graphicImage value="/recursos/images/loading.gif" />
+					</p:dialog>
+
 				</h:panelGrid>
 			</p:panel>
 		</h:form>
 
 		<h:form id="cadastro">
-			<p:panel header="Cadastro" style="margin-top: 15px">
+			<p:panel header="Cadastro" style="margin-top: 15px"
+				rendered="#{not empty consultaInstancia.cliente.instancia}">
 				<p:panelGrid columns="2">
 					<p:outputLabel value="Tecnologia de Linha:" />
 					<p:outputLabel
-						value="#{consultaCadastro.cliente.linha.tipoCentral}" />
+						value="#{consultaInstancia.cliente.linha}" />
+						
+					<p:outputLabel value="Designador de Banda:" />
+					<p:outputLabel
+						value="#{consultaInstancia.cliente.cadastro.designator}" />						
+						
+						
+						
 				</p:panelGrid>
 			</p:panel>
 		</h:form>

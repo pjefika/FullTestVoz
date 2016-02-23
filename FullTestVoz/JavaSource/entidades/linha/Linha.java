@@ -1,20 +1,23 @@
 package entidades.linha;
 
-public class Linha {
-	
-	private String tipoCentral;
+import entidades.diagnosticos.Diagnostico;
 
-	
+public class Linha implements LinhaInterface{
+		
 	public Linha() {
 		
 	}
+
+	@Override
+	public Diagnostico getDiagnostico() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Diagnostico setDiagnostico() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
-	public String getTipoCentral() {
-		return tipoCentral;
-	}
-
-	public void setTipoCentral(String tipoCentral) {
-		this.tipoCentral = tipoCentral;
-	}
-
 }
