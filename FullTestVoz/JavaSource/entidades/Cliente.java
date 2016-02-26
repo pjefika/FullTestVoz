@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import bean.ossturbonet.oss.gvt.com.GetInfoOut;
 import bean.ossturbonet.oss.gvt.com.RadiusInfo;
 import entidades.linha.Linha;
-import entidades.linha.LinhaInterface;
 
 public class Cliente {
 	
@@ -22,9 +21,9 @@ public class Cliente {
 	
 	private Linha linha;
 	
-	
+		
 	public Cliente() {
-		this.linha = new Linha();
+		
 	}
 
 	public String getInstancia() {
@@ -66,4 +65,5 @@ public class Cliente {
 	public void setLinha(Linha linha) {
 		this.linha = linha;
 	}
+
 }

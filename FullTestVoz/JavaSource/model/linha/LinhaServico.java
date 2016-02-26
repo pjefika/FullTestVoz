@@ -1,17 +1,14 @@
 package model.linha;
 
 import java.rmi.RemoteException;
-
-import com.gvt.www.metaData.smarttool.Credenciais;
 import com.gvt.www.uraservices.GetSwitchInfoOut;
 import com.gvt.www.uraservices.UraServicesProxy;
-import com.gvt.www.ws.eai.configuradoronline.devicemanagement.sipdomain.DiagnosticoSIPOut;
 
 import entidades.linha.Linha;
-import entidades.linha.LinhaInterface;
-import entidades.linha.LinhaSip;
+import entidades.linha.TecnologiaLinhaFactory;
 
-public class LinhaServico implements DiagnosticoLinha{
+
+public class LinhaServico{
 
 	private UraServicesProxy uraServices;
 
@@ -26,40 +23,14 @@ public class LinhaServico implements DiagnosticoLinha{
 		return info;
 	}
 
-	public Linha tipoCentral(GetSwitchInfoOut infoSwitch){
-
-		if(infoSwitch.getResultMessage().equals("IMS-SIP")){
-			Linha sip = new LinhaSip();
-			((LinhaSip) sip).setGpon(infoSwitch.isGpon());
-			return sip;
-		}
-
-		return new Linha();
-	}
-
-	public void consultar(){
-
+	public Linha create(String tecnologia) throws Exception{
+		
+		TecnologiaLinhaFactory factory = new TecnologiaLinhaFactory();
+		return factory.create(tecnologia);
 	}
 	
-	public Credenciais credenciais(){
-		
-		Credenciais credenciais = new Credenciais();
-		credenciais.setLogin("URA");
-		credenciais.setUsername("URA");
-		credenciais.setSistemaOrigem("URA");
-		
-		return credenciais;
-	}
-
-	@Override
-	public void executarDiagnostico(String instancia, String designador) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public DiagnosticoSIPOut getDiagnostico() {
-		// TODO Auto-generated method stub
-		return null;
+	public LinhaServicoInterface createService(String tecnologia) throws Exception{
+		TecnologiaLinhaFactory factory = new TecnologiaLinhaFactory();
+		return factory.createService(tecnologia);
 	}
 }

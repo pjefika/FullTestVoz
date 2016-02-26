@@ -1,23 +1,13 @@
 package entidades.linha;
 
-import entidades.diagnosticos.Diagnostico;
+import java.util.List;
 
-public class Linha implements LinhaInterface{
-		
-	public Linha() {
-		
-	}
+import entidades.diagnostico.Diagnostico;
 
-	@Override
-	public Diagnostico getDiagnostico() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public Diagnostico setDiagnostico() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public interface Linha {
+
+	List<Diagnostico> getDiagnostico();
 	
+	void setDiagnostico(List<Diagnostico> diagnostico);
 }

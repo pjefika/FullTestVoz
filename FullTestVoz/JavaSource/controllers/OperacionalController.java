@@ -2,6 +2,7 @@ package controllers;
 
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -9,52 +10,41 @@ import javax.faces.bean.ViewScoped;
 import com.gvt.www.uraservices.GetSwitchInfoOut;
 
 import entidades.Cliente;
+import entidades.diagnostico.Diagnostico;
 import exception.ossturbonet.oss.gvt.com.DataNotFoundException;
 import exception.ossturbonet.oss.gvt.com.OSSTurbonetException;
 import model.CadastroServico;
-import model.ClienteServico;
-import model.FullTestVoz;
 import model.linha.LinhaServico;
-import model.linha.LinhaSipServico;
+import model.linha.LinhaServicoInterface;
 import util.JSFUtil;
 
 @ManagedBean
 @ViewScoped
-public class ConsultaInstancia implements FullTestVoz{
+public class OperacionalController{
 
 	private Cliente cliente;
 
 	private CadastroServico servicoCadastro;
 
-	private LinhaServico servicoLinha;
+	private LinhaServicoInterface servicoLinha;
 
-	private ClienteServico servicoCliente;
-
-	public ConsultaInstancia(){
-
+	public OperacionalController(){
 		this.cliente = new Cliente();
 		this.servicoCadastro = new CadastroServico();
-		this.servicoCliente = new ClienteServico();
-		
 	}
-
 
 	/**
 	 * Método acionado pelo Usuário na página inicial (index.xhtml);
 	 * @return 
 	 * 
 	 */
-	public Cliente consultar(){
-
+	public void consultar(){		
+		
 		this.consultarCadastro();
-		this.consultarLinha();
-		this.consultarServico();
+		this.consultarVoz();
+		this.diagnostico();
 		
-		//this.diagnostico();
-		
-		return this.cliente;
 	}
-
 
 
 	public void consultarCadastro(){
@@ -66,6 +56,7 @@ public class ConsultaInstancia implements FullTestVoz{
 			this.cliente.setCadastro(this.servicoCadastro.consultaCadastro(this.cliente));
 
 		} catch (DataNotFoundException e) {
+			
 			JSFUtil.addErrorMessage("Cadastro não encontrado!");
 		} catch (OSSTurbonetException e) {
 			JSFUtil.addErrorMessage("Cadastro não encontrado!");
@@ -73,37 +64,36 @@ public class ConsultaInstancia implements FullTestVoz{
 			JSFUtil.addErrorMessage("Cadastro não encontrado!");
 		}	
 	}
-
-	public void consultarLinha(){
-
+	
+	public void consultarVoz(){
+		
 		try {
-
-			GetSwitchInfoOut infoSwitch = this.servicoLinha.getInfoSwitch(this.cliente.getInstancia());
-			
-
-			
+			LinhaServico consulta = new LinhaServico();
+			GetSwitchInfoOut info = consulta.getInfoSwitch(this.cliente.getInstancia());
+			this.cliente.setLinha(consulta.create(info.getResultMessage()));
+			this.servicoLinha = consulta.createService(info.getResultMessage());
 		} catch (RemoteException e) {
+			JSFUtil.addErrorMessage("Erro ao consultar instância! " + e.getMessage());
+		} catch (Exception e) {
 			JSFUtil.addErrorMessage(e.getMessage());
 		}
+		
 	}
-
-	public void diagnostico() {
-
+	
+	public void diagnostico(){
+		
 		try {
-			this.servicoLinha.executarDiagnostico(this.cliente.getInstancia(), this.cliente.getDesignador());
+			
+			List<Diagnostico> diagnostico = this.servicoLinha.diagnostico(this.cliente);
+			
+			this.cliente.getLinha().setDiagnostico(diagnostico);
+			
+			
 		} catch (RemoteException e) {
-			JSFUtil.addErrorMessage(e.getMessage());
+			JSFUtil.addErrorMessage("Erro ao realizar diagnostico: " + e.getMessage());
 		}
-
 	}
-
-	public void consultarServico(){
-
-		if(this.cliente.getLinha().toString().equals("IMS-SIP")){
-			this.servicoLinha = new LinhaSipServico();
-		}
-
-	}
+	
 
 	public CadastroServico getServicoCadastro() {
 		return servicoCadastro;
@@ -114,16 +104,7 @@ public class ConsultaInstancia implements FullTestVoz{
 		this.servicoCadastro = servicoCadastro;
 	}
 
-
-	public LinhaServico getServicoLinha() {
-		return servicoLinha;
-	}
-
-
-	public void setServicoLinha(LinhaServico servicoLinha) {
-		this.servicoLinha = servicoLinha;
-	}
-
+	
 
 	public Cliente getCliente() {
 		return cliente;
@@ -131,15 +112,5 @@ public class ConsultaInstancia implements FullTestVoz{
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-
-
-	public ClienteServico getServicoCliente() {
-		return servicoCliente;
-	}
-
-
-	public void setServicoCliente(ClienteServico servicoCliente) {
-		this.servicoCliente = servicoCliente;
 	}
 }

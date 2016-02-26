@@ -1,26 +1,16 @@
 package entidades.linha;
 
-import com.gvt.www.ws.eai.configuradoronline.devicemanagement.sipdomain.DiagnosticoSIPOut;
+import java.util.List;
 
-import entidades.diagnosticos.Diagnostico;
+import entidades.diagnostico.Diagnostico;
 
-public class LinhaSip extends Linha implements LinhaInterface{
+public class LinhaSip implements Linha{
 	
-	private Boolean gpon;
-	
-	private DiagnosticoSIPOut diagnostico;
+	private List<Diagnostico> diagnostico;
 	
 	
 	public LinhaSip() {
-		super();
-	}
 
-	public Boolean getGpon() {
-		return gpon;
-	}
-
-	public void setGpon(Boolean gpon) {
-		this.gpon = gpon;
 	}
 
 	@Override
@@ -28,7 +18,14 @@ public class LinhaSip extends Linha implements LinhaInterface{
 		return "IMS-SIP";
 	}
 
-	public void setDiagnostico(DiagnosticoSIPOut diagnostico) {
+	@Override
+	public List<Diagnostico> getDiagnostico() {
+		// TODO Auto-generated method stub
+		return this.diagnostico;
+	}
+
+	@Override
+	public void setDiagnostico(List<Diagnostico> diagnostico) {
 		this.diagnostico = diagnostico;
 	}
 }

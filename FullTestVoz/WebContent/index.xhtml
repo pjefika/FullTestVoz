@@ -19,14 +19,14 @@
 	<ui:define name="conteudo">
 
 		<h:form>
-			<p:panel header="FullTest Voz">
+			<p:panel header="FullTest Voz Teste">
 				<h:panelGrid columns="3">
 					<p:inputText id="instancia"
-						value="#{consultaInstancia.cliente.instancia}"
+						value="#{operacionalController.cliente.instancia}"
 						placeholder="Instância..." />
 
-					<p:commandButton action="#{consultaInstancia.consultar()}"
-						value="Consultar" update="@form, cadastro">
+					<p:commandButton action="#{operacionalController.consultar()}"
+						value="Consultar" update="@all">
 						<p:ajaxStatus onstart="PF('statusDialog').show()"
 							onsuccess="PF('statusDialog').hide()" />
 					</p:commandButton>
@@ -44,20 +44,40 @@
 
 		<h:form id="cadastro">
 			<p:panel header="Cadastro" style="margin-top: 15px"
-				rendered="#{not empty consultaInstancia.cliente.instancia}">
+				rendered="#{not empty operacionalController.cliente.linha}">
 				<p:panelGrid columns="2">
-					<p:outputLabel value="Tecnologia de Linha:" />
-					<p:outputLabel
-						value="#{consultaInstancia.cliente.linha}" />
-						
-					<p:outputLabel value="Designador de Banda:" />
-					<p:outputLabel
-						value="#{consultaInstancia.cliente.cadastro.designator}" />						
-						
-						
-						
+
+					<h:outputLabel value="Designador de Banda:" />
+					<h:outputLabel
+						value="#{operacionalController.cliente.cadastro.designator}" />
+
+					<h:outputLabel value="Perfil Radius:" />
+					<h:outputLabel
+						value="#{operacionalController.cliente.cadastro.infoRadius.radiusProfile}" />
+
+
+					<h:outputLabel value="Tecnologia Voz:" />
+					<h:outputLabel value="#{operacionalController.cliente.linha}" />
+
 				</p:panelGrid>
 			</p:panel>
+
+			<p:panel header="Informações do Modem" style="margin-top: 15px"
+				rendered="#{not empty operacionalController.cliente.linha}">
+				<p:panelGrid columns="1">
+					<p:dataTable var="diag"
+						value="#{operacionalController.cliente.linha.diagnostico}">
+						<p:column headerText="Referência">
+							<h:outputText value="#{diag.valor}" />
+						</p:column>
+						<p:column headerText="Valor">
+							<h:outputText value="#{diag.valorReferencia}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:panelGrid>
+			</p:panel>
+
 		</h:form>
 	</ui:define>
 
